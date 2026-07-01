@@ -38,4 +38,12 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return ApiResponse::unauthorized($exception->getMessage() ?: 'Unauthenticated.');
         });
+
+        $exceptions->render(function (\DomainException $exception, Request $request) {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+
+            return ApiResponse::businessError($exception->getMessage(), 422);
+        });
     })->create();

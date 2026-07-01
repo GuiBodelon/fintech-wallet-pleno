@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Services\WalletService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +16,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $user = User::query()->updateOrCreate(
+            ['email' => 'demo@fintech.test'],
+            [
+                'name' => 'Demo User',
+                'password' => 'password',
+            ],
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $wallet = $user->wallet()->firstOrCreate([
+            'user_id' => $user->id,
         ]);
+
+        if ($wallet->transactions()->doesntExist()) {
+            app(WalletService::class)->deposit($user, 100000);
+        }
     }
 }

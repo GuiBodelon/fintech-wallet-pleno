@@ -1,11 +1,15 @@
 # Challenge source material
-./docs
+*.docx
 AGENTS.md
+docs/codex-scope.md
 
 # Environment files
 .env
 .env.*
 !.env.example
+!backend/.env.example
+!frontend/.env.example
+
 
 # Dependencies
 vendor/
