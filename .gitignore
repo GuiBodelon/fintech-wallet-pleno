@@ -1,0 +1,41 @@
+# Challenge source material
+./docs
+AGENTS.md
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+.pnpm-store/
+
+# Laravel
+backend/storage/*.key
+backend/storage/app/*
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/framework/views/*
+backend/storage/logs/*
+backend/bootstrap/cache/*.php
+backend/public/storage
+
+# Nuxt
+frontend/.nuxt/
+frontend/.output/
+frontend/dist/
+
+# Build and coverage artifacts
+coverage/
+.phpunit.cache/
+.pest.cache/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
