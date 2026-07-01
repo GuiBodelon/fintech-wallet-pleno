@@ -9,7 +9,7 @@ docs/codex-scope.md
 !.env.example
 !backend/.env.example
 !frontend/.env.example
-
+docker-compose-old.yml
 
 # Dependencies
 vendor/
