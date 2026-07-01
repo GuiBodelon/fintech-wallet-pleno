@@ -1,0 +1,944 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-07-01T18:59:13.292247+00:00",
+  "__export_source": "chatgpt",
+  "resources": [
+    {
+      "_id": "wrk_fintech_wallet_pleno",
+      "parentId": null,
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "workspace",
+      "name": "Fintech Wallet Pleno API",
+      "description": "Insomnia collection for Laravel Sanctum + Nuxt fintech wallet MVP backend endpoints.",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_fintech_wallet_local",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "environment",
+      "name": "Local Docker",
+      "data": {
+        "base_url": "http://localhost:8000",
+        "auth_token": "",
+        "user_name": "Demo User",
+        "user_email": "demo@fintech.test",
+        "user_password": "password",
+        "deposit_amount": "100.00",
+        "withdraw_amount": "25.50",
+        "invalid_amount_zero": "0",
+        "invalid_amount_negative": "-10.00",
+        "insufficient_withdraw_amount": "999999.99",
+        "from_date": "2026-01-01",
+        "to_date": "2026-12-31",
+        "per_page": "10"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "auth_token",
+          "user_name",
+          "user_email",
+          "user_password",
+          "deposit_amount",
+          "withdraw_amount",
+          "invalid_amount_zero",
+          "invalid_amount_negative",
+          "insufficient_withdraw_amount",
+          "from_date",
+          "to_date",
+          "per_page"
+        ]
+      },
+      "color": "#5B21B6",
+      "isPrivate": false,
+      "metaSortKey": 1782932353292
+    },
+    {
+      "_id": "jar_fintech_wallet",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "cookie_jar",
+      "name": "Default Jar",
+      "cookies": []
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request_group",
+      "name": "01 - Auth",
+      "description": "Registration, login, authenticated user and logout.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 100
+    },
+    {
+      "_id": "fld_wallet",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request_group",
+      "name": "02 - Wallet",
+      "description": "Wallet balance, deposit and withdrawal operations.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 200
+    },
+    {
+      "_id": "fld_transactions",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request_group",
+      "name": "03 - Transactions",
+      "description": "Transaction history with pagination and filters.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 300
+    },
+    {
+      "_id": "fld_dashboard",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request_group",
+      "name": "04 - Dashboard",
+      "description": "Wallet dashboard summary.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 400
+    },
+    {
+      "_id": "fld_negative",
+      "parentId": "wrk_fintech_wallet_pleno",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request_group",
+      "name": "05 - Negative / Edge Cases",
+      "description": "Failure scenarios for API validation and business rules.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 500
+    },
+    {
+      "_id": "req_auth_register",
+      "parentId": "fld_auth",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/register",
+      "name": "Register user",
+      "description": "Creates a user and should also create a wallet with zero balance.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"{{ _.user_name }}\",\n  \"email\": \"{{ _.user_email }}\",\n  \"password\": \"{{ _.user_password }}\",\n  \"password_confirmation\": \"{{ _.user_password }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 110,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_auth_login",
+      "parentId": "fld_auth",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/login",
+      "name": "Login user",
+      "description": "Expected to return an access token. Copy it to the environment variable auth_token.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"{{ _.user_email }}\",\n  \"password\": \"{{ _.user_password }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 120,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_auth_me",
+      "parentId": "fld_auth",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/me",
+      "name": "Get authenticated user",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 130,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_auth_logout",
+      "parentId": "fld_auth",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/logout",
+      "name": "Logout user",
+      "description": "",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 140,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_wallet_get",
+      "parentId": "fld_wallet",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet",
+      "name": "Get wallet",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 210,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_wallet_deposit",
+      "parentId": "fld_wallet",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/deposit",
+      "name": "Deposit",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.deposit_amount }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 220,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_wallet_withdraw",
+      "parentId": "fld_wallet",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/withdraw",
+      "name": "Withdraw",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.withdraw_amount }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 230,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_transactions_list",
+      "parentId": "fld_transactions",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "List transactions",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 310,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_transactions_credit",
+      "parentId": "fld_transactions",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "Filter transactions by credit",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "type",
+          "value": "credit",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 320,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_transactions_debit",
+      "parentId": "fld_transactions",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "Filter transactions by debit",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "type",
+          "value": "debit",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 330,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_transactions_period",
+      "parentId": "fld_transactions",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "Filter transactions by period",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "from",
+          "value": "{{ _.from_date }}",
+          "disabled": false
+        },
+        {
+          "name": "to",
+          "value": "{{ _.to_date }}",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 340,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_transactions_combined_filters",
+      "parentId": "fld_transactions",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "Filter transactions by type and period",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "type",
+          "value": "credit",
+          "disabled": false
+        },
+        {
+          "name": "from",
+          "value": "{{ _.from_date }}",
+          "disabled": false
+        },
+        {
+          "name": "to",
+          "value": "{{ _.to_date }}",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 350,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_dashboard_summary",
+      "parentId": "fld_dashboard",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/dashboard",
+      "name": "Get dashboard summary",
+      "description": "Expected data: current balance, last 5 transactions, monthly deposited total and monthly withdrawn total.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 410,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_me_unauthenticated",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/me",
+      "name": "Unauthorized - Get authenticated user without token",
+      "description": "Expected: 401.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 510,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_deposit_zero",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/deposit",
+      "name": "Deposit invalid - zero amount",
+      "description": "Expected: 422 validation error.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.invalid_amount_zero }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 520,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_deposit_negative",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/deposit",
+      "name": "Deposit invalid - negative amount",
+      "description": "Expected: 422 validation error.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.invalid_amount_negative }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 530,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_withdraw_zero",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/withdraw",
+      "name": "Withdraw invalid - zero amount",
+      "description": "Expected: 422 validation error.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.invalid_amount_zero }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 540,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_withdraw_negative",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/withdraw",
+      "name": "Withdraw invalid - negative amount",
+      "description": "Expected: 422 validation error.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.invalid_amount_negative }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 550,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_withdraw_insufficient",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/wallet/withdraw",
+      "name": "Withdraw invalid - insufficient balance",
+      "description": "Expected: 409 business rule conflict or equivalent business error status.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": \"{{ _.insufficient_withdraw_amount }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 560,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_negative_transactions_invalid_type",
+      "parentId": "fld_negative",
+      "modified": 1782932353292,
+      "created": 1782932353292,
+      "_type": "request",
+      "url": "{{ _.base_url }}/api/transactions",
+      "name": "Transactions invalid - wrong type filter",
+      "description": "Expected: 422 validation error.",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "type",
+          "value": "invalid",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "disabled": false
+        },
+        {
+          "name": "per_page",
+          "value": "{{ _.per_page }}",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}",
+          "description": "Set auth_token in the active environment after login."
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 570,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    }
+  ]
+}
