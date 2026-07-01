@@ -28,3 +28,11 @@ docker compose exec backend php artisan test
 docker compose exec backend php artisan migrate:fresh --seed
 docker compose exec frontend pnpm typecheck
 ```
+
+## Usuarios seedados
+
+Depois de executar `docker compose exec backend php artisan migrate:fresh --seed`, use:
+
+- `demo@fintech.test` / `password`: usuario principal com wallet, saldo positivo e historico com creditos e debitos.
+- `empty@fintech.test` / `password`: usuario com wallet zerada e sem transacoes.
+- `lowbalance@fintech.test` / `password`: usuario com saldo baixo para testar saque insuficiente.
