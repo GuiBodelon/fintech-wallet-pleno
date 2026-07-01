@@ -27,6 +27,7 @@ docker compose up -d
 docker compose exec backend php artisan test
 docker compose exec backend php artisan migrate:fresh --seed
 docker compose exec frontend pnpm typecheck
+coes> docker compose exec backend php artisan optimize:clear
 ```
 
 ## Usuarios seedados

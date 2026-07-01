@@ -53,7 +53,7 @@ class WalletEndpointsTest extends TestCase
     public function test_deposit_rejects_invalid_amount(): void
     {
         $user = User::factory()->create();
-        $user->wallet()->create([
+        $wallet = $user->wallet()->create([
             'balance_cents' => 1000,
         ]);
 
@@ -76,6 +76,15 @@ class WalletEndpointsTest extends TestCase
         ])
             ->assertUnprocessable()
             ->assertJsonPath('success', false);
+
+        $this->postJson('/api/wallet/deposit', [
+            'amount' => '0.001',
+        ])
+            ->assertUnprocessable()
+            ->assertJsonPath('success', false);
+
+        $this->assertSame(1000, $wallet->fresh()->balance_cents);
+        $this->assertDatabaseCount('transactions', 0);
     }
 
     public function test_authenticated_user_can_withdraw_with_sufficient_balance(): void
