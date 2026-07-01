@@ -6,24 +6,26 @@ services:
     container_name: fintech-wallet-backend
     working_dir: /var/www/html
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-8000}:8000"
     volumes:
       - ./backend:/var/www/html
       - backend_vendor:/var/www/html/vendor
     environment:
-      APP_NAME: "Fintech Wallet"
-      APP_ENV: local
-      APP_DEBUG: "true"
-      APP_URL: http://localhost:8000
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_DATABASE: fintech_wallet
-      DB_USERNAME: fintech_wallet
-      DB_PASSWORD: secret
-      SESSION_DRIVER: database
-      CACHE_STORE: database
-      QUEUE_CONNECTION: database
+      APP_NAME: "${APP_NAME:-Fintech Wallet}"
+      APP_ENV: "${APP_ENV:-local}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      APP_URL: "${APP_URL:-http://localhost:8000}"
+
+      DB_CONNECTION: "${DB_CONNECTION:-pgsql}"
+      DB_HOST: "${DB_HOST:-postgres}"
+      DB_PORT: "${DB_PORT:-5432}"
+      DB_DATABASE: "${DB_DATABASE:-fintech_wallet}"
+      DB_USERNAME: "${DB_USERNAME:-fintech_wallet}"
+      DB_PASSWORD: "${DB_PASSWORD:-secret}"
+
+      SESSION_DRIVER: "${SESSION_DRIVER:-database}"
+      CACHE_STORE: "${CACHE_STORE:-database}"
+      QUEUE_CONNECTION: "${QUEUE_CONNECTION:-database}"
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,12 +37,12 @@ services:
     container_name: fintech-wallet-frontend
     working_dir: /app
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT:-3000}:3000"
     volumes:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules
     environment:
-      NUXT_PUBLIC_API_BASE_URL: http://localhost:8000/api
+      NUXT_PUBLIC_API_BASE_URL: "${NUXT_PUBLIC_API_BASE_URL:-http://localhost:8000/api}"
     depends_on:
       - backend
 
@@ -48,15 +50,15 @@ services:
     image: postgres:17-alpine
     container_name: fintech-wallet-postgres
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     environment:
-      POSTGRES_DB: fintech_wallet
-      POSTGRES_USER: fintech_wallet
-      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: "${DB_DATABASE:-fintech_wallet}"
+      POSTGRES_USER: "${DB_USERNAME:-fintech_wallet}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U fintech_wallet -d fintech_wallet"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
