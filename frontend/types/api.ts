@@ -71,6 +71,27 @@ export type TransactionHistoryData = {
   pagination: PaginationMeta
 }
 
+export type TransactionFilters = {
+  type?: TransactionType
+  from?: string
+  to?: string
+  page?: number
+  per_page?: number
+}
+
+export type WalletData = {
+  wallet: Wallet
+}
+
+export type WalletOperationPayload = {
+  amount: string
+}
+
+export type WalletOperationData = {
+  wallet: Wallet
+  transaction: Transaction
+}
+
 export type LoginPayload = {
   email: string
   password: string
@@ -96,3 +117,7 @@ export type LoginResponse = ApiSuccessResponse<AuthSessionData>
 export type RegisterResponse = ApiSuccessResponse<AuthSessionData>
 export type LogoutResponse = ApiSuccessResponse<null>
 export type MeResponse = ApiSuccessResponse<MeData>
+export type WalletResponse = ApiSuccessResponse<WalletData>
+export type WalletOperationResponse = ApiSuccessResponse<WalletOperationData>
+export type DashboardResponse = ApiSuccessResponse<Dashboard>
+export type TransactionHistoryResponse = ApiSuccessResponse<TransactionHistoryData>
