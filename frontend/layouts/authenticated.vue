@@ -49,8 +49,7 @@ const authStore = useAuthStore()
 
 const links = [
   { label: 'Dashboard', to: '/dashboard' },
-  { label: 'Depositar', to: '/deposit' },
-  { label: 'Sacar', to: '/withdraw' },
+  { label: 'Depositar / Sacar', to: '/deposit' },
   { label: 'Historico', to: '/transactions' },
 ]
 

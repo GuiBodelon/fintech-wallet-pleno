@@ -13,6 +13,7 @@
       :name="name"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      :inputmode="inputmode"
       :disabled="disabled"
       :aria-invalid="Boolean(error)"
       :class="inputClasses"
@@ -36,6 +37,7 @@ const props = withDefaults(defineProps<{
   name?: string
   placeholder?: string
   autocomplete?: string
+  inputmode?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
   error?: string
   disabled?: boolean
 }>(), {
@@ -51,6 +53,6 @@ const inputClasses = computed(() => [
   'h-11 w-full rounded-md border bg-white px-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500',
   props.error
     ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-100'
-    : 'border-slate-300 focus:border-orange-500 focus:ring-orange-100',
+    : 'border-slate-300 focus:border-emerald-500 focus:ring-emerald-100',
 ])
 </script>
