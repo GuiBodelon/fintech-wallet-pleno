@@ -21,42 +21,84 @@
 
     <AppCard>
       <form
-        class="grid gap-4 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
+        class="grid gap-4 xl:grid-cols-[1.2fr_1fr_1fr_auto]"
         @submit.prevent="applyFilters"
       >
         <label class="flex flex-col gap-2">
           <span class="text-sm font-semibold text-slate-700">Tipo de transação</span>
-          <select
-            v-model="filters.type"
-            class="h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-          >
-            <option value="">
-              Todos
-            </option>
-            <option value="credit">
-              Crédito
-            </option>
-            <option value="debit">
-              Débito
-            </option>
-          </select>
+          <div class="relative">
+            <UIcon
+              name="i-lucide-list-filter"
+              class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+            />
+            <select
+              v-model="filters.type"
+              class="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-10 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+            >
+              <option value="">
+                Todos
+              </option>
+              <option value="credit">
+                Crédito
+              </option>
+              <option value="debit">
+                Débito
+              </option>
+            </select>
+            <UIcon
+              name="i-lucide-chevron-down"
+              class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+            />
+          </div>
         </label>
 
-        <AppInput
-          v-model="filters.from"
-          label="Data inicial"
-          type="date"
-          name="from"
-        />
+        <label class="flex flex-col gap-2">
+          <span class="text-sm font-semibold text-slate-700">Data inicial</span>
+          <div class="relative">
+            <UIcon
+              name="i-lucide-calendar"
+              class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+            />
+            <input
+              v-model="filters.from"
+              type="date"
+              name="from"
+              class="h-11 w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-3 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              @change="resetPage"
+            >
+          </div>
+          <span
+            v-if="filters.from"
+            class="text-xs font-medium text-slate-500"
+          >
+            {{ formatFilterDate(filters.from) }}
+          </span>
+        </label>
 
-        <AppInput
-          v-model="filters.to"
-          label="Data final"
-          type="date"
-          name="to"
-        />
+        <label class="flex flex-col gap-2">
+          <span class="text-sm font-semibold text-slate-700">Data final</span>
+          <div class="relative">
+            <UIcon
+              name="i-lucide-calendar"
+              class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+            />
+            <input
+              v-model="filters.to"
+              type="date"
+              name="to"
+              class="h-11 w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-3 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              @change="resetPage"
+            >
+          </div>
+          <span
+            v-if="filters.to"
+            class="text-xs font-medium text-slate-500"
+          >
+            {{ formatFilterDate(filters.to) }}
+          </span>
+        </label>
 
-        <div class="flex items-end gap-2">
+        <div class="flex flex-col gap-2 sm:flex-row xl:items-end">
           <AppButton
             type="submit"
             size="lg"
@@ -76,7 +118,7 @@
                 name="i-lucide-rotate-ccw"
                 class="size-4"
               />
-              Limpar
+              Limpar filtros
             </span>
           </AppButton>
         </div>
@@ -180,7 +222,6 @@
 import AppAlert from '~/components/ui/AppAlert.vue'
 import AppButton from '~/components/ui/AppButton.vue'
 import AppCard from '~/components/ui/AppCard.vue'
-import AppInput from '~/components/ui/AppInput.vue'
 import AppPagination from '~/components/ui/AppPagination.vue'
 import type { TransactionFilters, TransactionType } from '~/types/api'
 
@@ -205,6 +246,10 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   timeStyle: 'short',
 })
 
+const filterDateFormatter = new Intl.DateTimeFormat('pt-BR', {
+  dateStyle: 'short',
+})
+
 const paginationDescription = computed(() => {
   const pagination = walletStore.pagination
 
@@ -214,6 +259,8 @@ const paginationDescription = computed(() => {
 
   return `Mostrando ${pagination.from ?? 0} a ${pagination.to ?? 0} de ${pagination.total} transações.`
 })
+
+watch(() => filters.type, resetPage)
 
 onMounted(() => {
   void loadTransactions()
@@ -246,6 +293,10 @@ async function loadTransactions() {
   }
 }
 
+function resetPage() {
+  filters.page = 1
+}
+
 function buildTransactionFilters(): TransactionFilters {
   return {
     type: filters.type ? filters.type as TransactionType : undefined,
@@ -270,6 +321,10 @@ function formatDate(value: string | null): string {
   }
 
   return dateFormatter.format(new Date(value))
+}
+
+function formatFilterDate(value: string): string {
+  return filterDateFormatter.format(new Date(`${value}T00:00:00`))
 }
 
 function typeBadgeClasses(type: TransactionType): string {
