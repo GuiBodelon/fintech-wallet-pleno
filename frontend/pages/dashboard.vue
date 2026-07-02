@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p class="text-sm font-medium text-emerald-700">
-          Visao geral
+          Visão geral
         </p>
         <h2 class="mt-1 text-2xl font-bold text-slate-950">
           Dashboard
@@ -12,7 +12,7 @@
           v-if="authStore.user"
           class="mt-1 text-sm text-slate-500"
         >
-          Ola, {{ authStore.user.name }}. Acompanhe o saldo e as movimentacoes recentes.
+          Olá, {{ authStore.user.name }}. Acompanhe o saldo e as movimentações recentes.
         </p>
       </div>
 
@@ -53,43 +53,43 @@
             {{ formatCents(walletStore.dashboard?.wallet.balance_cents) }}
           </p>
           <p class="mt-2 text-sm text-slate-500">
-            Saldo disponivel na carteira.
+            Saldo disponível na carteira.
           </p>
         </AppCard>
 
-        <AppCard title="Depositado no mes">
+        <AppCard title="Depositado no mês">
           <p class="text-3xl font-bold text-emerald-700">
             {{ formatCents(walletStore.dashboard?.current_month.deposited_cents) }}
           </p>
           <p class="mt-2 text-sm text-slate-500">
-            Total de entradas no mes atual.
+            Total de entradas no mês atual.
           </p>
         </AppCard>
 
-        <AppCard title="Sacado no mes">
+        <AppCard title="Sacado no mês">
           <p class="text-3xl font-bold text-rose-700">
             {{ formatCents(walletStore.dashboard?.current_month.withdrawn_cents) }}
           </p>
           <p class="mt-2 text-sm text-slate-500">
-            Total de saidas no mes atual.
+            Total de saídas no mês atual.
           </p>
         </AppCard>
       </div>
 
       <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
         <AppCard
-          title="Ultimas transacoes"
-          description="As 5 movimentacoes mais recentes da carteira."
+          title="Últimas transações"
+          description="As 5 movimentações mais recentes da carteira."
         >
           <div
             v-if="lastTransactions.length === 0"
             class="rounded-md border border-dashed border-slate-300 px-4 py-8 text-center"
           >
             <p class="text-sm font-medium text-slate-700">
-              Nenhuma transacao encontrada.
+              Nenhuma transação encontrada.
             </p>
             <p class="mt-1 text-sm text-slate-500">
-              Depositos e saques aparecerao aqui depois da primeira movimentacao.
+              Depósitos e saques aparecerão aqui depois da primeira movimentação.
             </p>
           </div>
 
@@ -116,7 +116,7 @@
                   {{ transactionSign(transaction.type) }}{{ formatCents(transaction.amount_cents) }}
                 </p>
                 <p class="mt-1 text-xs text-slate-500">
-                  Saldo apos: {{ formatCents(transaction.balance_after_cents) }}
+                  Saldo após: {{ formatCents(transaction.balance_after_cents) }}
                 </p>
               </div>
             </li>
@@ -124,22 +124,29 @@
         </AppCard>
 
         <AppCard
-          title="Acoes rapidas"
+          title="Ações rápidas"
           description="Acesse os fluxos principais da carteira."
         >
           <div class="flex flex-col gap-3">
             <AppButton
               size="lg"
-              @click="navigateTo('/wallet')"
+              @click="navigateTo('/operations?tab=deposit')"
             >
-              Depositar / Sacar
+              Depositar
+            </AppButton>
+            <AppButton
+              variant="secondary"
+              size="lg"
+              @click="navigateTo('/operations?tab=withdraw')"
+            >
+              Sacar
             </AppButton>
             <AppButton
               variant="ghost"
               size="lg"
               @click="navigateTo('/transactions')"
             >
-              Ver historico
+              Ver transações
             </AppButton>
           </div>
         </AppCard>
@@ -183,7 +190,7 @@ async function loadDashboard() {
 }
 
 function transactionTypeLabel(type: TransactionType): string {
-  return type === 'credit' ? 'Deposito' : 'Saque'
+  return type === 'credit' ? 'Depósito' : 'Saque'
 }
 
 function transactionSign(type: TransactionType): string {
@@ -199,7 +206,7 @@ function transactionAmountClasses(type: TransactionType): string {
 
 function formatDate(value: string | null): string {
   if (!value) {
-    return 'Data nao disponivel'
+    return 'Data não disponível'
   }
 
   return dateFormatter.format(new Date(value))

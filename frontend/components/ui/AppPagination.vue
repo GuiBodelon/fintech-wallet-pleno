@@ -1,10 +1,10 @@
 <template>
   <nav
-    class="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between"
-    aria-label="Paginacao"
+    class="flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between"
+    aria-label="Paginação"
   >
     <p class="text-sm text-slate-600">
-      Pagina {{ pagination.current_page }} de {{ pagination.last_page }}
+      Página {{ pagination.current_page }} de {{ pagination.last_page }}
     </p>
     <div class="flex items-center gap-2">
       <AppButton
@@ -21,7 +21,7 @@
         :disabled="pagination.current_page >= pagination.last_page"
         @click="emit('change', pagination.current_page + 1)"
       >
-        Proxima
+        Próxima
       </AppButton>
     </div>
   </nav>

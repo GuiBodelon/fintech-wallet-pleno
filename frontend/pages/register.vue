@@ -77,7 +77,7 @@
           </AppButton>
 
           <p class="text-center text-sm text-slate-600">
-            Ja tem conta?
+            Já tem conta?
             <NuxtLink
               to="/login"
               class="font-semibold text-emerald-700 hover:text-emerald-800"

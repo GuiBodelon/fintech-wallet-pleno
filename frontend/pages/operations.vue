@@ -29,7 +29,7 @@
             {{ formatCents(currentBalanceCents) }}
           </p>
           <p class="mt-1 text-sm text-slate-500">
-            Disponivel para uso
+            Disponível para uso
           </p>
         </div>
 
@@ -78,7 +78,7 @@
           />
 
           <p class="text-sm text-slate-500">
-            Valor minimo: R$ 0,01
+            Valor mínimo: R$ 0,01
           </p>
 
           <AppButton
@@ -124,7 +124,7 @@
           />
 
           <p class="text-sm text-slate-500">
-            Saldo disponivel: {{ formatCents(currentBalanceCents) }}
+            Saldo disponível: {{ formatCents(currentBalanceCents) }}
           </p>
 
           <AppButton
@@ -140,7 +140,7 @@
     </div>
 
     <AppAlert variant="info">
-      Depositos sao processados imediatamente. Saques dependem da validacao do saldo disponivel.
+      Depósitos são processados imediatamente. Saques dependem da validação do saldo disponível.
     </AppAlert>
   </section>
 </template>
@@ -205,13 +205,13 @@ async function handleDeposit() {
   const amountCents = parseCurrencyToCents(depositForm.amount)
 
   if (!amountCents || amountCents <= 0) {
-    depositLocalAmountError.value = 'Informe um valor valido maior que zero.'
+    depositLocalAmountError.value = 'Informe um valor válido maior que zero.'
     return
   }
 
   try {
     await walletStore.deposit({ amount: depositForm.amount.trim() })
-    depositSuccess.value = walletStore.successMessage ?? 'Deposito realizado com sucesso.'
+    depositSuccess.value = walletStore.successMessage ?? 'Depósito realizado com sucesso.'
     depositForm.amount = ''
     await walletStore.fetchDashboard()
   } catch {
@@ -226,7 +226,7 @@ async function handleWithdraw() {
   const amountCents = parseCurrencyToCents(withdrawForm.amount)
 
   if (!amountCents || amountCents <= 0) {
-    withdrawLocalAmountError.value = 'Informe um valor valido maior que zero.'
+    withdrawLocalAmountError.value = 'Informe um valor válido maior que zero.'
     return
   }
 

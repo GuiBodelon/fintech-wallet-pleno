@@ -40,14 +40,24 @@ const variantMap: Record<NonNullable<typeof props.variant>, ButtonVariant> = {
 const color = computed<ButtonColor>(() => (props.variant === 'danger' ? 'error' : 'primary'))
 const uiVariant = computed<ButtonVariant>(() => variantMap[props.variant])
 
+const sizeClasses: Record<NonNullable<typeof props.size>, string> = {
+  xs: 'h-8 px-3 text-xs',
+  sm: 'h-9 px-3 text-sm',
+  md: 'h-10 px-4 text-sm',
+  lg: 'h-11 px-5 text-sm',
+  xl: 'h-12 px-6 text-base',
+}
+
+const variantClasses: Record<NonNullable<typeof props.variant>, string> = {
+  primary: 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-200',
+  secondary: 'border border-slate-200 bg-white text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:ring-emerald-200',
+  danger: 'bg-rose-600 text-white shadow-sm hover:bg-rose-700 focus-visible:ring-rose-200',
+  ghost: 'text-slate-700 hover:bg-slate-100 focus-visible:ring-emerald-200',
+}
+
 const buttonClasses = computed(() => [
-  'inline-flex items-center justify-center rounded-md font-semibold transition disabled:cursor-not-allowed disabled:opacity-60',
-  props.size === 'lg' ? 'h-11 px-4 text-sm' : 'h-10 px-3 text-sm',
-  {
-    primary: 'bg-emerald-600 text-white hover:bg-emerald-700',
-    secondary: 'border border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
-    danger: 'bg-rose-600 text-white hover:bg-rose-700',
-    ghost: 'text-slate-700 hover:bg-slate-100',
-  }[props.variant],
+  'inline-flex items-center justify-center rounded-xl font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 focus-visible:ring-4',
+  sizeClasses[props.size],
+  variantClasses[props.variant],
 ])
 </script>

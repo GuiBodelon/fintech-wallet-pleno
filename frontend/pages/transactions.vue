@@ -5,10 +5,10 @@
         Carteira
       </p>
       <h2 class="mt-1 text-2xl font-bold text-slate-950">
-        Transacoes
+        Transações
       </h2>
       <p class="mt-1 text-sm text-slate-500">
-        Consulte as movimentacoes da sua carteira.
+        Consulte as movimentações da sua carteira.
       </p>
     </div>
 
@@ -21,7 +21,7 @@
 
     <AppCard
       title="Filtros"
-      description="Refine a consulta por tipo ou periodo."
+      description="Refine a consulta por tipo ou período."
     >
       <form
         class="grid gap-4 lg:grid-cols-[1fr_1fr_1fr_auto_auto]"
@@ -31,16 +31,16 @@
           <span class="text-sm font-medium text-slate-700">Tipo</span>
           <select
             v-model="filters.type"
-            class="h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-950 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+            class="h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
           >
             <option value="">
               Todos
             </option>
             <option value="credit">
-              Credito
+              Crédito
             </option>
             <option value="debit">
-              Debito
+              Débito
             </option>
           </select>
         </label>
@@ -54,7 +54,7 @@
 
         <AppInput
           v-model="filters.to"
-          label="Ate"
+          label="Até"
           type="date"
           name="to"
         />
@@ -83,7 +83,7 @@
     </AppCard>
 
     <AppCard
-      title="Historico"
+      title="Histórico"
       :description="paginationDescription"
     >
       <div
@@ -102,10 +102,10 @@
         class="rounded-md border border-dashed border-slate-300 px-4 py-8 text-center"
       >
         <p class="text-sm font-medium text-slate-700">
-          Nenhuma transacao encontrada.
+          Nenhuma transação encontrada.
         </p>
         <p class="mt-1 text-sm text-slate-500">
-          Ajuste os filtros ou realize uma movimentacao na carteira.
+          Ajuste os filtros ou realize uma movimentação na carteira.
         </p>
       </div>
 
@@ -126,7 +126,7 @@
                 Valor
               </th>
               <th class="whitespace-nowrap px-3 py-3 text-right">
-                Saldo apos
+                Saldo após
               </th>
             </tr>
           </thead>
@@ -198,10 +198,10 @@ const paginationDescription = computed(() => {
   const pagination = walletStore.pagination
 
   if (!pagination || pagination.total === 0) {
-    return 'Nenhuma movimentacao para os filtros atuais.'
+    return 'Nenhuma movimentação para os filtros atuais.'
   }
 
-  return `Exibindo ${pagination.from ?? 0}-${pagination.to ?? 0} de ${pagination.total} transacoes.`
+  return `Exibindo ${pagination.from ?? 0}-${pagination.to ?? 0} de ${pagination.total} transações.`
 })
 
 onMounted(() => {
@@ -246,7 +246,7 @@ function buildTransactionFilters(): TransactionFilters {
 }
 
 function transactionTypeLabel(type: TransactionType): string {
-  return type === 'credit' ? 'Credito' : 'Debito'
+  return type === 'credit' ? 'Crédito' : 'Débito'
 }
 
 function transactionSign(type: TransactionType): string {
@@ -255,7 +255,7 @@ function transactionSign(type: TransactionType): string {
 
 function formatDate(value: string | null): string {
   if (!value) {
-    return 'Data nao disponivel'
+    return 'Data não disponível'
   }
 
   return dateFormatter.format(new Date(value))
