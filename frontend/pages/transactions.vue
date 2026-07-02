@@ -1,14 +1,14 @@
 <template>
   <section class="flex flex-col gap-6">
     <div>
-      <p class="text-sm font-medium text-emerald-700">
+      <p class="text-sm font-semibold text-emerald-700">
         Carteira
       </p>
-      <h2 class="mt-1 text-2xl font-bold text-slate-950">
-        Transações
+      <h2 class="mt-1 text-3xl font-bold tracking-tight text-slate-950">
+        Histórico de transações
       </h2>
-      <p class="mt-1 text-sm text-slate-500">
-        Consulte as movimentações da sua carteira.
+      <p class="mt-2 text-sm text-slate-500">
+        Confira todas as movimentações da sua carteira.
       </p>
     </div>
 
@@ -19,16 +19,13 @@
       {{ walletStore.error }}
     </AppAlert>
 
-    <AppCard
-      title="Filtros"
-      description="Refine a consulta por tipo ou período."
-    >
+    <AppCard>
       <form
-        class="grid gap-4 lg:grid-cols-[1fr_1fr_1fr_auto_auto]"
+        class="grid gap-4 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
         @submit.prevent="applyFilters"
       >
         <label class="flex flex-col gap-2">
-          <span class="text-sm font-medium text-slate-700">Tipo</span>
+          <span class="text-sm font-semibold text-slate-700">Tipo de transação</span>
           <select
             v-model="filters.type"
             class="h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-950 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
@@ -47,19 +44,19 @@
 
         <AppInput
           v-model="filters.from"
-          label="De"
+          label="Data inicial"
           type="date"
           name="from"
         />
 
         <AppInput
           v-model="filters.to"
-          label="Até"
+          label="Data final"
           type="date"
           name="to"
         />
 
-        <div class="flex items-end">
+        <div class="flex items-end gap-2">
           <AppButton
             type="submit"
             size="lg"
@@ -67,23 +64,27 @@
           >
             Filtrar
           </AppButton>
-        </div>
 
-        <div class="flex items-end">
           <AppButton
             variant="secondary"
             size="lg"
             :disabled="walletStore.loading"
             @click="clearFilters"
           >
-            Limpar
+            <span class="flex items-center gap-2">
+              <UIcon
+                name="i-lucide-rotate-ccw"
+                class="size-4"
+              />
+              Limpar
+            </span>
           </AppButton>
         </div>
       </form>
     </AppCard>
 
     <AppCard
-      title="Histórico"
+      title="Movimentações"
       :description="paginationDescription"
     >
       <div
@@ -91,17 +92,23 @@
         class="flex flex-col gap-3"
       >
         <div
-          v-for="item in 5"
+          v-for="item in 8"
           :key="item"
-          class="h-14 animate-pulse rounded-md bg-slate-100"
+          class="h-14 animate-pulse rounded-xl bg-slate-100"
         />
       </div>
 
       <div
         v-else-if="walletStore.transactions.length === 0"
-        class="rounded-md border border-dashed border-slate-300 px-4 py-8 text-center"
+        class="rounded-2xl border border-dashed border-slate-300 px-4 py-10 text-center"
       >
-        <p class="text-sm font-medium text-slate-700">
+        <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+          <UIcon
+            name="i-lucide-search"
+            class="size-6"
+          />
+        </div>
+        <p class="mt-4 text-sm font-semibold text-slate-700">
           Nenhuma transação encontrada.
         </p>
         <p class="mt-1 text-sm text-slate-500">
@@ -113,20 +120,20 @@
         v-else
         class="overflow-x-auto"
       >
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <table class="min-w-full divide-y divide-slate-100 text-sm">
           <thead>
-            <tr class="text-left text-xs font-semibold uppercase text-slate-500">
-              <th class="whitespace-nowrap px-3 py-3">
-                Data
+            <tr class="bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500">
+              <th class="whitespace-nowrap px-4 py-3">
+                Data / Hora
               </th>
-              <th class="whitespace-nowrap px-3 py-3">
+              <th class="whitespace-nowrap px-4 py-3">
                 Tipo
               </th>
-              <th class="whitespace-nowrap px-3 py-3 text-right">
+              <th class="whitespace-nowrap px-4 py-3 text-right">
                 Valor
               </th>
-              <th class="whitespace-nowrap px-3 py-3 text-right">
-                Saldo após
+              <th class="whitespace-nowrap px-4 py-3 text-right">
+                Saldo após operação
               </th>
             </tr>
           </thead>
@@ -134,20 +141,24 @@
             <tr
               v-for="transaction in walletStore.transactions"
               :key="transaction.id"
-              class="text-slate-700"
+              class="text-slate-700 transition hover:bg-slate-50/70"
             >
-              <td class="whitespace-nowrap px-3 py-4">
+              <td class="whitespace-nowrap px-4 py-4">
                 {{ formatDate(transaction.occurred_at) }}
               </td>
-              <td class="whitespace-nowrap px-3 py-4">
+              <td class="whitespace-nowrap px-4 py-4">
                 <span :class="typeBadgeClasses(transaction.type)">
+                  <UIcon
+                    :name="transaction.type === 'credit' ? 'i-lucide-arrow-down' : 'i-lucide-arrow-up'"
+                    class="size-3.5"
+                  />
                   {{ transactionTypeLabel(transaction.type) }}
                 </span>
               </td>
               <td :class="amountClasses(transaction.type)">
                 {{ transactionSign(transaction.type) }}{{ formatCents(transaction.amount_cents) }}
               </td>
-              <td class="whitespace-nowrap px-3 py-4 text-right font-medium text-slate-950">
+              <td class="whitespace-nowrap px-4 py-4 text-right font-medium text-slate-950">
                 {{ formatCents(transaction.balance_after_cents) }}
               </td>
             </tr>
@@ -201,7 +212,7 @@ const paginationDescription = computed(() => {
     return 'Nenhuma movimentação para os filtros atuais.'
   }
 
-  return `Exibindo ${pagination.from ?? 0}-${pagination.to ?? 0} de ${pagination.total} transações.`
+  return `Mostrando ${pagination.from ?? 0} a ${pagination.to ?? 0} de ${pagination.total} transações.`
 })
 
 onMounted(() => {
@@ -263,7 +274,7 @@ function formatDate(value: string | null): string {
 
 function typeBadgeClasses(type: TransactionType): string {
   return [
-    'inline-flex rounded-full px-2 py-1 text-xs font-semibold',
+    'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold',
     type === 'credit'
       ? 'bg-emerald-50 text-emerald-700'
       : 'bg-rose-50 text-rose-700',
@@ -272,7 +283,7 @@ function typeBadgeClasses(type: TransactionType): string {
 
 function amountClasses(type: TransactionType): string {
   return [
-    'whitespace-nowrap px-3 py-4 text-right font-semibold',
+    'whitespace-nowrap px-4 py-4 text-right font-semibold',
     type === 'credit' ? 'text-emerald-700' : 'text-rose-700',
   ].join(' ')
 }
