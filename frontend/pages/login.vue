@@ -1,21 +1,39 @@
 <template>
-  <main class="min-h-screen bg-slate-50 px-4 py-10">
-    <section class="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-md flex-col justify-center">
-      <div class="mb-6 text-center">
-        <p class="text-sm font-semibold uppercase text-emerald-700">
+  <main class="min-h-screen bg-slate-50 px-4 py-10 text-slate-950">
+    <section class="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-lg flex-col justify-center">
+      <div class="mb-8 text-center">
+        <div class="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
+          <UIcon
+            name="i-lucide-wallet"
+            class="size-7"
+          />
+        </div>
+        <p class="mt-4 text-2xl font-bold tracking-tight text-slate-950">
           Fintech Wallet
         </p>
-        <h1 class="mt-2 text-3xl font-bold text-slate-950">
-          Entrar
-        </h1>
-        <p class="mt-2 text-sm text-slate-600">
-          Acesse sua carteira digital.
+        <p class="mt-2 text-sm text-slate-500">
+          Sua carteira digital, simples e segura.
         </p>
       </div>
 
       <AppCard>
+        <div class="mb-6 text-center">
+          <div class="mx-auto flex size-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+            <UIcon
+              name="i-lucide-lock-keyhole"
+              class="size-7"
+            />
+          </div>
+          <h1 class="mt-4 text-2xl font-bold text-slate-950">
+            Entrar
+          </h1>
+          <p class="mt-2 text-sm text-slate-500">
+            Acesse sua conta para continuar.
+          </p>
+        </div>
+
         <form
-          class="flex flex-col gap-4"
+          class="flex flex-col gap-5"
           @submit.prevent="handleSubmit"
         >
           <AppAlert
@@ -48,6 +66,7 @@
           />
 
           <AppButton
+            class="w-full"
             type="submit"
             size="lg"
             :loading="authStore.loading"
@@ -59,7 +78,7 @@
             Novo na Fintech Wallet?
             <NuxtLink
               to="/register"
-              class="font-semibold text-emerald-700 hover:text-emerald-800"
+              class="font-semibold text-emerald-700 transition hover:text-emerald-800 focus-visible:rounded focus-visible:outline-emerald-300"
             >
               Criar conta
             </NuxtLink>
