@@ -1,39 +1,62 @@
 # Fintech Wallet Pleno
 
-MVP de carteira digital pessoal desenvolvido para um desafio técnico fullstack pleno.
+MVP fullstack de carteira digital pessoal desenvolvido para um desafio técnico. A aplicação permite cadastro e login de usuários, consulta de saldo, depósitos, saques, histórico paginado de transações e dashboard com resumo mensal.
 
-O backend já implementa autenticação, criação automática de wallet no cadastro, depósitos, saques, histórico de transações, resumo de dashboard, seed de usuários para testes manuais e testes automatizados para os fluxos críticos.
+## Links
+
+| Item | Link |
+|---|---|
+| Repositório público | https://github.com/GuiBodelon/fintech-wallet-pleno |
+| Deploy público | https://fintech-wallet-web-production.up.railway.app/ |
+| Backend API | https://fintech-wallet-api-production.up.railway.app/api |
 
 ## Stack
 
 **Backend**
 
-- PHP 8.3+
+- PHP 8.4+
 - Laravel 13
 - Laravel Sanctum
 - PostgreSQL
 - Eloquent ORM
 - Form Requests
-- Service Layer
-- Testes automatizados
+- Service Layer para regras financeiras
+- PHPUnit
 
 **Frontend**
 
+- Node.js 22
 - Nuxt 3 em modo SPA
-- Vue 3 Composition API
+- Vue 3 com Composition API
 - TypeScript
 - Pinia
 - TailwindCSS
+- Nuxt UI
+- pnpm
 
 **Infra**
 
 - Docker Compose
+- PostgreSQL 17 Alpine
 
-## Configuração do ambiente local
+## Pré-requisitos
 
-Os arquivos `.env` reais não são versionados. Crie os arquivos locais a partir dos exemplos.
+Para rodar com Docker:
 
-Linux/macOS:
+- Docker
+- Docker Compose
+
+Para rodar comandos fora do Docker:
+
+- PHP 8.4+
+- Composer 2+
+- Node.js 22+
+- pnpm 11+
+- PostgreSQL 17+ ou outro PostgreSQL compatível
+
+## Configuração do ambiente
+
+Os arquivos `.env` reais não são versionados. Crie os arquivos locais a partir dos exemplos:
 
 ```bash
 cp .env.example .env
@@ -49,12 +72,35 @@ Copy-Item backend/.env.example backend/.env
 Copy-Item frontend/.env.example frontend/.env
 ```
 
-## Execução com Docker
+Variáveis importantes:
 
-Suba o ambiente local com:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=postgres
+DB_PORT=5432
+DB_DATABASE=fintech_wallet
+DB_USERNAME=fintech_wallet
+DB_PASSWORD=secret
+
+NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+```
+
+Ao usar Docker, `DB_HOST` deve ser `postgres`, pois esse é o nome do serviço do banco no `docker-compose.yml`.
+
+## Instalação e execução com Docker
+
+Suba os serviços:
 
 ```bash
 docker compose up -d --build
+```
+
+O container do backend executa `composer install`, gera `APP_KEY` se necessário e roda as migrations. O container do frontend executa `pnpm install` e inicia o Nuxt em modo desenvolvimento.
+
+Depois que os containers estiverem de pé, rode seeders para popular dados de teste:
+
+```bash
+docker compose exec backend php artisan migrate:fresh --seed
 ```
 
 URLs locais:
@@ -65,63 +111,79 @@ URLs locais:
 | Backend API | http://localhost:8000/api |
 | PostgreSQL | localhost:5432 |
 
-## Setup Laravel
+## Instalação manual de dependências
 
-Após subir os containers, execute:
+Backend:
 
 ```bash
-docker compose exec backend php artisan key:generate
-docker compose exec backend php artisan optimize:clear
-docker compose exec backend php artisan migrate:fresh --seed
-docker compose exec backend php artisan test
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate:fresh --seed
+php artisan serve
 ```
 
-## Variáveis de ambiente
+Frontend:
 
-Principais variáveis do backend:
-
-```env
-DB_CONNECTION=pgsql
-DB_HOST=postgres
-DB_PORT=5432
-DB_DATABASE=fintech_wallet
-DB_USERNAME=fintech_wallet
-DB_PASSWORD=secret
+```bash
+cd frontend
+pnpm install
+cp .env.example .env
+pnpm dev
 ```
 
-Ao executar com Docker, `DB_HOST` deve ser `postgres`, pois esse é o nome do serviço no `docker-compose.yml`.
-
-Variável principal do frontend:
+Se o frontend estiver fora do Docker, mantenha em `frontend/.env`:
 
 ```env
 NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
 ```
 
+## Testes e validação
+
+Backend:
+
+```bash
+docker compose exec backend php artisan test
+```
+
+Frontend:
+
+```bash
+docker compose exec frontend pnpm typecheck
+docker compose exec frontend pnpm build
+```
+
+Também é possível rodar fora do Docker dentro de `frontend/`:
+
+```bash
+pnpm typecheck
+pnpm build
+```
+
 ## Usuários seedados
 
-Depois de executar `docker compose exec backend php artisan migrate:fresh --seed`, os usuários abaixo ficam disponíveis:
+Depois de rodar `docker compose exec backend php artisan migrate:fresh --seed`, os usuários abaixo ficam disponíveis:
 
 | Usuário | E-mail | Senha | Cenário |
 |---|---|---|---|
-| Demo User | `demo@fintech.test` | `password` | Usuário principal com wallet, saldo positivo e histórico com créditos e débitos |
+| Demo User | `demo@fintech.test` | `password` | Usuário principal com saldo positivo e histórico com créditos e débitos |
 | Empty Wallet User | `empty@fintech.test` | `password` | Wallet zerada e sem transações |
 | Low Balance User | `lowbalance@fintech.test` | `password` | Saldo baixo para testar saque insuficiente |
 
-## Autenticação da API
+## Endpoints da API
 
-Endpoints protegidos exigem token Bearer.
-
-Fluxo básico para testes:
-
-1. Faça login em `POST /api/login`.
-2. Copie o token retornado em `data.token`.
-3. Envie nas próximas requisições o header:
+Endpoints protegidos exigem token Sanctum no header:
 
 ```http
 Authorization: Bearer <token>
 ```
 
-## Endpoints da API
+Fluxo básico:
+
+1. Faça login em `POST /api/login`.
+2. Copie o token retornado em `data.token`.
+3. Use o token nas próximas requisições protegidas.
 
 ### Auth
 
@@ -156,7 +218,7 @@ Payload de login:
 
 | Método | Rota | Autenticação | Descrição |
 |---|---|---|---|
-| `GET` | `/api/wallet` | Sim | Retorna a wallet do usuário autenticado |
+| `GET` | `/api/wallet` | Sim | Retorna a carteira do usuário autenticado |
 | `POST` | `/api/wallet/deposit` | Sim | Realiza depósito |
 | `POST` | `/api/wallet/withdraw` | Sim | Realiza saque |
 
@@ -237,19 +299,6 @@ Erro de regra de negócio:
 }
 ```
 
-## Regras financeiras
-
-- Valores monetários são armazenados internamente em centavos inteiros.
-- Operações financeiras não usam ponto flutuante.
-- Depósito deve ter valor positivo.
-- Saque deve ter valor positivo.
-- Saque exige saldo suficiente.
-- Toda operação bem-sucedida cria uma transação.
-- Toda transação armazena o saldo após a operação em `balance_after_cents`.
-- Operações de wallet são atômicas.
-- A lógica financeira fica isolada em `WalletService`.
-- Controllers são mantidos finos.
-
 ## Collection do Insomnia
 
 A collection está disponível em:
@@ -260,39 +309,32 @@ docs/fintech-wallet-pleno-insomnia-collection.json
 
 Para usar:
 
-1. Abra o Insomnia.
-2. Importe o arquivo JSON da collection.
-3. Execute o login com um usuário seedado.
-4. Copie o token retornado.
-5. Configure a variável `auth_token` com esse valor.
+1. Importe o arquivo JSON no Insomnia.
+2. Execute o login com um usuário seedado.
+3. Copie o token retornado em `data.token`.
+4. Configure a variável `auth_token` com esse valor.
+5. Execute os endpoints protegidos usando a autenticação Bearer configurada.
+
+## Decisões técnicas
+
+- O backend é a fonte da verdade para regras financeiras.
+- Depósitos e saques ficam centralizados em `WalletService`.
+- Controllers foram mantidos finos, delegando validação para Form Requests e regras para Services.
+- Valores monetários são armazenados como centavos inteiros.
+- Operações financeiras usam transações de banco e lock da wallet durante atualização de saldo.
+- Cada operação bem-sucedida cria uma transação com `balance_after_cents`.
+- Laravel Sanctum protege os endpoints autenticados.
+- O frontend Nuxt consome a API Laravel diretamente via URL pública configurada.
+- Docker Compose padroniza backend, frontend e PostgreSQL para execução local.
 
 ## Comandos úteis
 
 ```bash
-docker compose up -d
-docker compose down
+docker compose up -d --build
+docker compose exec backend php artisan optimize:clear
 docker compose exec backend php artisan migrate:fresh --seed
 docker compose exec backend php artisan test
-docker compose exec backend php artisan optimize:clear
 docker compose exec frontend pnpm typecheck
+docker compose exec frontend pnpm build
+docker compose down
 ```
-
-## Testes
-
-Para executar os testes do backend:
-
-```bash
-docker compose exec backend php artisan test
-```
-
-Os testes cobrem fluxos críticos do backend, incluindo autenticação, criação de wallet no cadastro, depósitos, saques, falhas de validação, saldo insuficiente, histórico de transações e dashboard.
-
-## Decisões técnicas
-
-- Laravel concentra as regras de negócio.
-- Nuxt é usado apenas como aplicação frontend.
-- `WalletService` isola a lógica financeira.
-- Dinheiro é armazenado como centavos inteiros.
-- Docker Compose padroniza o ambiente local.
-- PostgreSQL é usado como banco de dados.
-- Laravel Sanctum protege os endpoints autenticados.
