@@ -121,7 +121,7 @@ class WalletEndpointsTest extends TestCase
         $this->postJson('/api/wallet/withdraw', [
             'amount' => '10.01',
         ])
-            ->assertUnprocessable()
+            ->assertConflict()
             ->assertJson([
                 'success' => false,
                 'message' => 'Insufficient wallet balance.',

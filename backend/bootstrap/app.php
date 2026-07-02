@@ -44,6 +44,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            return ApiResponse::businessError($exception->getMessage(), 422);
+            return ApiResponse::businessError($exception->getMessage());
         });
     })->create();
