@@ -130,7 +130,7 @@
           <div class="flex flex-col gap-3">
             <AppButton
               size="lg"
-              @click="navigateTo('/transactions')"
+              @click="navigateTo('/wallet')"
             >
               Depositar / Sacar
             </AppButton>
