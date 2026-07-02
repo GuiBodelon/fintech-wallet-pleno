@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: fintech-wallet-backend
     working_dir: /var/www/html
     ports:
@@ -33,7 +33,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: fintech-wallet-frontend
     working_dir: /app
     ports:
