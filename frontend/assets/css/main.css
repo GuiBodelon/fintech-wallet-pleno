@@ -1,7 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+html {
+  background: #f8fafc;
+}
 
 body {
   @apply bg-slate-50 text-slate-950 antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.18);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(16, 185, 129, 0.28);
+  outline-offset: 2px;
 }

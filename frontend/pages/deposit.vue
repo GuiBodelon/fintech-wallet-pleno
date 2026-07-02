@@ -7,5 +7,5 @@ definePageMeta({
   middleware: 'auth',
 })
 
-await navigateTo('/dashboard')
+await navigateTo('/operations?tab=deposit')
 </script>
